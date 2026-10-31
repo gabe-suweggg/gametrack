@@ -1,4 +1,4 @@
-/** The only prices file. Sample data. A later feed replaces this module, not the page. */
+import raw from "./prices.json";
 
 export type Location = {
   id: string;
@@ -19,57 +19,52 @@ export type PricePoint = {
   shelf: number;
 };
 
-export const product = {
-  name: "ASUS XG32UQWMS 32-inch OLED Gaming Monitor",
-  specs: "32\" 4K UHD OLED · 240Hz · 0.03ms · G-SYNC Compatible",
-  ports: "USB-C · HDMI 2.1 · DisplayPort 1.4",
+export type Product = {
+  id: string;
+  name: string;
+  specs: string;
+  ports: string;
+  image: string;
+  offers: Offer[];
+  history: PricePoint[];
 };
 
-export const locations: Location[] = [
-  { id: "ca", label: "California", zip: "94585", tax: 0.0875 },
-  { id: "ny", label: "New York", zip: "10001", tax: 0.08875 },
-  { id: "tx", label: "Texas", zip: "78701", tax: 0.0825 },
-  { id: "wa", label: "Washington", zip: "98101", tax: 0.1035 },
-  { id: "fl", label: "Florida", zip: "33101", tax: 0.07 },
-  { id: "or", label: "Oregon", zip: "97201", tax: 0 },
-];
+export const locations: Location[] = raw.locations;
+export const products: Product[] = raw.products;
 
-export const offers: Offer[] = [
-  { store: "Micro Center", site: "microcenter.com", shelf: 699, shipping: 24.99 },
-  { store: "Newegg", site: "newegg.com", shelf: 719, shipping: 0 },
-  { store: "Amazon", site: "amazon.com", shelf: 729, shipping: 0 },
-  { store: "B&H", site: "bhphotovideo.com", shelf: 739, shipping: 0 },
-  { store: "Best Buy", site: "bestbuy.com", shelf: 749, shipping: 0 },
-  { store: "ASUS Store", site: "asus.com", shelf: 799, shipping: 0 },
-];
+export function getProduct(id: string) {
+  return products.find((item) => item.id === id);
+}
 
-/** Lowest recorded shelf price. Shipping on those lows was free. */
-export const history: PricePoint[] = [
-  { date: "2025-11-14", shelf: 899 },
-  { date: "2025-11-28", shelf: 879 },
-  { date: "2025-12-05", shelf: 799 },
-  { date: "2025-12-12", shelf: 749 },
-  { date: "2025-12-26", shelf: 729 },
-  { date: "2026-01-16", shelf: 789 },
-  { date: "2026-01-30", shelf: 799 },
-  { date: "2026-02-13", shelf: 779 },
-  { date: "2026-02-27", shelf: 769 },
-  { date: "2026-03-13", shelf: 759 },
-  { date: "2026-03-27", shelf: 749 },
-  { date: "2026-04-17", shelf: 769 },
-  { date: "2026-05-01", shelf: 759 },
-  { date: "2026-05-22", shelf: 739 },
-  { date: "2026-06-12", shelf: 749 },
-  { date: "2026-07-03", shelf: 719 },
-  { date: "2026-07-10", shelf: 689 },
-  { date: "2026-07-24", shelf: 709 },
-  { date: "2026-08-14", shelf: 739 },
-  { date: "2026-08-28", shelf: 729 },
-  { date: "2026-09-11", shelf: 719 },
-  { date: "2026-09-25", shelf: 729 },
-  { date: "2026-10-09", shelf: 719 },
-  { date: "2026-10-23", shelf: 719 },
-];
+export function alertStorageKey(id: string) {
+  return `gametrack-alert:${id}`;
+}
+
+export function parseAlert(raw: string | null): { on: boolean; target: string } | null {
+  if (!raw) return null;
+  try {
+    const saved = JSON.parse(raw) as { on?: boolean; target?: string };
+    if (typeof saved.on !== "boolean" || typeof saved.target !== "string") return null;
+    return { on: saved.on, target: saved.target };
+  } catch {
+    return null;
+  }
+}
+
+export function locationFromSearch(search: Record<string, unknown>) {
+  const id = typeof search.loc === "string" ? search.loc : "ca";
+  return locations.some((location) => location.id === id) ? id : "ca";
+}
+
+export function rankOffers(offers: Offer[], tax: number) {
+  return offers
+    .map((offer) => ({
+      ...offer,
+      total: delivered(offer.shelf, offer.shipping, tax),
+      taxAmount: offer.shelf * tax,
+    }))
+    .sort((a, b) => a.total - b.total);
+}
 
 export const ranges = [
   { id: "3m", label: "3 months", days: 92 },
@@ -83,4 +78,75 @@ export function money(n: number) {
 
 export function delivered(shelf: number, shipping: number, tax: number) {
   return shelf * (1 + tax) + shipping;
+}
+
+export const asOf = "2026-10-29";
+
+export const nextSale = {
+  name: "Black Friday",
+  date: "2026-11-27",
+};
+
+export type Advice = {
+  title: "Buy now" | "Wait" | "No strong signal" | "Insufficient data";
+  confidence: "moderate" | "low";
+  tone: "buy" | "wait" | "neutral";
+  reason: string;
+};
+
+function weeksBetween(from: string, to: string) {
+  const day = 86_400_000;
+  return (new Date(to).getTime() - new Date(from).getTime()) / (7 * day);
+}
+
+export function advise(item: Product, tax: number): Advice {
+  if (item.history.length < 8) {
+    return {
+      title: "Insufficient data",
+      confidence: "low",
+      tone: "neutral",
+      reason: "There is not enough recorded history to suggest buying or waiting.",
+    };
+  }
+
+  const current = rankOffers(item.offers, tax)[0].total;
+  const low = Math.min(...item.history.map((point) => delivered(point.shelf, 0, tax)));
+  const weeks = weeksBetween(asOf, nextSale.date);
+  const nearLow = current <= low * 1.03;
+
+  if (nearLow && weeks > 6) {
+    return {
+      title: "Buy now",
+      confidence: "moderate",
+      tone: "buy",
+      reason: `Today's ${money(current)} total is near the lowest point on this chart (${money(low)}), and ${nextSale.name} is more than six weeks away. Past prices are not a guarantee.`,
+    };
+  }
+
+  if (weeks >= 3 && weeks <= 6 && !nearLow) {
+    return {
+      title: "Wait",
+      confidence: "moderate",
+      tone: "wait",
+      reason: `${nextSale.name} is about ${Math.round(weeks)} weeks away. Today's ${money(current)} total is above the lowest point on this chart (${money(low)}). This can be wrong.`,
+    };
+  }
+
+  return {
+    title: "No strong signal",
+    confidence: "low",
+    tone: "neutral",
+    reason: `Today's ${money(current)} total is not a clear low, and no major sale is close enough to justify waiting on this chart alone.`,
+  };
+}
+
+export function chartDrop(item: Product) {
+  const start = item.history.find((point) => point.date === "2025-11-14");
+  const end = item.history.find((point) => point.date === "2025-12-26");
+  if (!start || !end || end.shelf >= start.shelf) return null;
+  return {
+    from: start,
+    to: end,
+    percent: Math.round((1 - end.shelf / start.shelf) * 100),
+  };
 }

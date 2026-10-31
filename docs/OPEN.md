@@ -10,5 +10,6 @@ Nothing here is decided.
 - Who files affiliate applications
 - Who keeps prices accurate after the sample data is replaced
 - Go or no-go date
+- Whether the dashed alert line on the chart is a paid feature, and what stays free
 
 A line moves out of this file only after both people agree in Discord `#decisions`.
