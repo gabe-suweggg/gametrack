@@ -16,7 +16,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { advise, alertStorageKey, chartDrop, cheaperThanToday, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, type Product } from "@/data/product";
+import { advise, alertStorageKey, chartDrop, cheaperThanToday, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, sameAsToday, type Product } from "@/data/product";
 import { ChangeMark, ReviewNote } from "@/components/change-mark";
 import { SiteHeader } from "@/components/site-header";
 
@@ -176,6 +176,12 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
                   {cheaperThanToday(item, best.total, location.tax)}
                   <ChangeMark kind="updated" />
                 </p>
+                {sameAsToday(item, best.total, location.tax) ? (
+                  <p className="text-sm text-muted">
+                    {sameAsToday(item, best.total, location.tax)}
+                    <ChangeMark kind="new" />
+                  </p>
+                ) : null}
               </div>
               <label className="flex items-center gap-2 text-sm text-muted">
                 <MapPin className="size-4 text-accent" />

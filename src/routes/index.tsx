@@ -14,6 +14,7 @@ import {
   parseAlert,
   products,
   rankOffers,
+  sameAsToday,
 } from "@/data/product";
 
 function historyLine(values: number[], target: number | null) {
@@ -152,6 +153,12 @@ function Home() {
                       {cheaperThanToday(item, best.total, location.tax)}
                       <ChangeMark kind="updated" />
                     </span>
+                    {sameAsToday(item, best.total, location.tax) ? (
+                      <span className="mt-1 block text-sm text-muted">
+                        {sameAsToday(item, best.total, location.tax)}
+                        <ChangeMark kind="new" />
+                      </span>
+                    ) : null}
                   </span>
                   </span>
                   <span>

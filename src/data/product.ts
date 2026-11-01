@@ -105,6 +105,17 @@ export function cheaperThanToday(item: Product, total: number, tax: number) {
   return `${days.length} recorded days on this chart were cheaper.`;
 }
 
+export function sameAsToday(item: Product, total: number, tax: number) {
+  const days = item.history
+    .filter((point) => Math.abs(delivered(point.shelf, 0, tax) - total) < 0.5)
+    .map((point) => shortDate(point.date));
+  const recent = days.slice(-2);
+  if (recent.length === 0) return null;
+  if (recent.length === 1) return `Same as ${recent[0]}.`;
+  if (days.length > recent.length) return `Also the same on ${recent[0]} and ${recent[1]}.`;
+  return `Same as ${recent[0]} and ${recent[1]}.`;
+}
+
 export const asOf = "2026-10-29";
 
 export const nextSale = {
