@@ -194,3 +194,14 @@ export function chartDrop(item: Product) {
     percent: Math.round((1 - end.shelf / start.shelf) * 100),
   };
 }
+
+export function versusDecember(shelf: number, today: number, tax: number, place: string) {
+  const then = delivered(shelf, 0, tax);
+  const gap = today - then;
+  if (Math.abs(gap) < 0.5) {
+    return `In ${place}, that December low was ${money(then)}. Today matches it.`;
+  }
+  return gap < 0
+    ? `In ${place}, that December low was ${money(then)}. Today is ${money(Math.abs(gap))} under it.`
+    : `In ${place}, that December low was ${money(then)}. Today is ${money(gap)} above it.`;
+}

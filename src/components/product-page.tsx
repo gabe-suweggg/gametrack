@@ -17,7 +17,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { advise, alertStorageKey, chartDrop, cheaperThanToday, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, sameAsToday, type Product } from "@/data/product";
+import { advise, alertStorageKey, chartDrop, cheaperThanToday, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, sameAsToday, versusDecember, type Product } from "@/data/product";
 import { ChangeMark, ReviewNote } from "@/components/change-mark";
 import { SiteHeader } from "@/components/site-header";
 
@@ -394,11 +394,17 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
               <ChangeMark kind="updated" />
             </h2>
             {drop ? (
-              <p className="mt-2 text-sm leading-relaxed text-muted">
-                The recorded shelf price on this chart went from {money(drop.from.shelf)} on Nov 14,
-                2025 to {money(drop.to.shelf)} on Dec 26, 2025, about {drop.percent}% lower. That is
-                this model’s history, not a prediction for {nextSale.name}.
-              </p>
+              <>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  The recorded shelf price on this chart went from {money(drop.from.shelf)} on Nov 14,
+                  2025 to {money(drop.to.shelf)} on Dec 26, 2025, about {drop.percent}% lower. That is
+                  this model’s history, not a prediction for {nextSale.name}.
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-fg">
+                  {versusDecember(drop.to.shelf, best.total, location.tax, location.label)}
+                  <ChangeMark kind="new" />
+                </p>
+              </>
             ) : (
               <p className="mt-2 text-sm leading-relaxed text-muted">
                 This chart does not include a full holiday season, so there is no past sale to point

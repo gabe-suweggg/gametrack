@@ -16,6 +16,7 @@ import {
   products,
   rankOffers,
   sameAsToday,
+  versusDecember,
 } from "@/data/product";
 
 function historyLine(values: number[], target: number | null, today: number) {
@@ -154,16 +155,7 @@ function Home() {
                     ) : null}
                     {drop ? (
                       <span className="mt-1 block text-sm text-muted">
-                        {(() => {
-                          const then = delivered(drop.to.shelf, 0, location.tax);
-                          const gap = best.total - then;
-                          if (Math.abs(gap) < 0.5) {
-                            return `In ${location.label}, that December low was ${money(then)}. Today matches it.`;
-                          }
-                          return gap < 0
-                            ? `In ${location.label}, that December low was ${money(then)}. Today is ${money(Math.abs(gap))} under it.`
-                            : `In ${location.label}, that December low was ${money(then)}. Today is ${money(gap)} above it.`;
-                        })()}
+                        {versusDecember(drop.to.shelf, best.total, location.tax, location.label)}
                         <ChangeMark kind="new" />
                       </span>
                     ) : null}
