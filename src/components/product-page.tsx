@@ -145,6 +145,18 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
             </dl>
             <p className="mt-3 text-sm text-dim">ASUS published measurements.</p>
           </div>
+          <div className="mt-4 rounded-2xl border border-line bg-surface p-5">
+            <h2 className="text-sm font-medium text-muted">
+              In the box
+              <ChangeMark kind="new" />
+            </h2>
+            <ul className="mt-3 grid gap-1 text-sm">
+              {item.inbox.map((part) => (
+                <li key={part}>{part}</li>
+              ))}
+            </ul>
+            <p className="mt-3 text-sm text-dim">ASUS list. Contents can vary by region.</p>
+          </div>
         </section>
 
         <section className="flex flex-col gap-4">
