@@ -130,6 +130,21 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
             </dl>
             <p className="mt-3 text-sm text-dim">Manufacturer specifications. Not measured by GameTrack.</p>
           </div>
+          <div className="mt-4 rounded-2xl border border-line bg-surface p-5">
+            <h2 className="text-sm font-medium text-muted">
+              Size and weight
+              <ChangeMark kind="new" />
+            </h2>
+            <dl className="mt-3 grid gap-2">
+              {item.size.map((row) => (
+                <div key={row.label} className="grid grid-cols-[7.5rem_minmax(0,1fr)] gap-3 text-sm">
+                  <dt className="text-muted">{row.label}</dt>
+                  <dd>{row.value}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-3 text-sm text-dim">ASUS published measurements.</p>
+          </div>
         </section>
 
         <section className="flex flex-col gap-4">

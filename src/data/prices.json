@@ -28,6 +28,10 @@
         { "label": "Stand", "value": "Tilt, swivel, 110 mm height, VESA 100x100" },
         { "label": "Warranty", "value": "3 years, includes burn-in" }
       ],
+      "size": [
+        { "label": "With stand", "value": "28.27 in wide, 22.13 in tall, 7.40 in deep · 14.33 lb" },
+        { "label": "Screen only", "value": "28.27 in wide, 16.97 in tall, 2.91 in deep · 9.70 lb" }
+      ],
       "offers": [
         { "store": "Micro Center", "site": "microcenter.com", "shelf": 699, "shipping": 24.99 },
         { "store": "Newegg", "site": "newegg.com", "shelf": 719, "shipping": 0 },

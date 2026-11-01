@@ -26,6 +26,7 @@ export type Product = {
   ports: string;
   image: string;
   details: { label: string; value: string }[];
+  size: { label: string; value: string }[];
   offers: Offer[];
   history: PricePoint[];
 };
