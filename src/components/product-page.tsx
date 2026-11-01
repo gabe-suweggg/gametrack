@@ -10,13 +10,14 @@ import {
   CartesianGrid,
   Line,
   LineChart,
+  ReferenceDot,
   ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
-import { advise, alertStorageKey, chartDrop, comparisons, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, type Product } from "@/data/product";
+import { advise, alertStorageKey, chartDrop, comparisons, delivered, locations, money, monthAgoPoint, nextSale, parseAlert, ranges, rankOffers, type Product } from "@/data/product";
 import { ChangeMark, ReviewNote } from "@/components/change-mark";
 import { SiteHeader } from "@/components/site-header";
 
@@ -75,6 +76,7 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
     return item.history
       .filter((point) => chartDate(point.date).getTime() >= cutoff)
       .map((point) => ({
+        date: point.date,
         label: chartDate(point.date).toLocaleDateString("en-US", {
           month: "short",
           day: "numeric",
@@ -84,6 +86,8 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
       }));
   }, [item, location, rangeId]);
 
+  const monthPoint = monthAgoPoint(item);
+  const monthInView = series.find((point) => point.date === monthPoint?.date);
   const lowInView = series.some((point) => point.total === lowTotal);
 
   const advice = advise(item, location.tax);
@@ -330,6 +334,16 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
                       }}
                     />
                   ) : null}
+                  {monthInView ? (
+                    <ReferenceDot
+                      x={monthInView.label}
+                      y={monthInView.total}
+                      r={7}
+                      fill="var(--color-fg)"
+                      stroke="var(--color-accent)"
+                      strokeWidth={3}
+                    />
+                  ) : null}
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -339,7 +353,13 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
               full chart
               {lowInView ? "" : ", and it is outside the selected range"}.
               {targetKnown ? ` The gray line is your $${target} alert.` : ""} Not a forecast.
-              {targetKnown ? <ChangeMark kind="new" /> : null}
+              {monthPoint ? (
+                <>
+                  {" "}
+                  The outlined dot is {chartDate(monthPoint.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}.
+                  <ChangeMark kind="new" />
+                </>
+              ) : null}
             </p>
           </article>
 

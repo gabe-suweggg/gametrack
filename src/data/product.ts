@@ -93,10 +93,14 @@ function shortDate(iso: string) {
   return calendarDate(iso).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-export function comparisons(item: Product, total: number, tax: number) {
+export function monthAgoPoint(item: Product) {
   const cutoff = calendarDate(asOf);
   cutoff.setDate(cutoff.getDate() - 30);
-  const prior = [...item.history].reverse().find((point) => calendarDate(point.date) <= cutoff);
+  return [...item.history].reverse().find((point) => calendarDate(point.date) <= cutoff) ?? null;
+}
+
+export function comparisons(item: Product, total: number, tax: number) {
+  const prior = monthAgoPoint(item);
   let month: string | null = null;
   if (prior) {
     const gap = total - delivered(prior.shelf, 0, tax);
