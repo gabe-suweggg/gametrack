@@ -7,7 +7,6 @@ import {
   advise,
   alertStorageKey,
   cheaperThanToday,
-  comparisons,
   delivered,
   locationFromSearch,
   locations,
@@ -96,7 +95,6 @@ function Home() {
           {products.map((item) => {
             const ranked = rankOffers(item.offers, location.tax);
             const best = ranked[0];
-            const compared = comparisons(item, best.total, location.tax);
             const advice = advise(item, location.tax);
             const saved = alerts[item.id] ?? { on: true, target: "700" };
             const targetNumber = saved ? Number(saved.target) : NaN;
@@ -148,10 +146,6 @@ function Home() {
                     <span className="block text-2xl font-semibold">{money(best.total)}</span>
                     <span className="mt-1 block text-sm text-muted">
                       Delivered in {location.label} · {best.site}
-                      <ChangeMark kind="updated" />
-                    </span>
-                    <span className="mt-1 block text-sm text-muted">
-                      {compared}
                       <ChangeMark kind="updated" />
                     </span>
                     <span className="mt-1 block text-sm text-muted">

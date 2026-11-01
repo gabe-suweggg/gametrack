@@ -93,28 +93,15 @@ function shortDate(iso: string) {
   return calendarDate(iso).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-export function comparisons(item: Product, total: number, tax: number) {
-  const lowPoint = item.history.reduce((lowest, point) =>
-    point.shelf < lowest.shelf ? point : lowest,
-  );
-  const gap = total - delivered(lowPoint.shelf, 0, tax);
-  const when = shortDate(lowPoint.date);
-  if (Math.abs(gap) < 0.5) return `At the ${when} low.`;
-  return gap > 0
-    ? `${money(gap)} above the ${when} low.`
-    : `${money(Math.abs(gap))} below the ${when} low.`;
-}
-
 export function cheaperThanToday(item: Product, total: number, tax: number) {
   const days = item.history
     .filter((point) => delivered(point.shelf, 0, tax) + 0.5 < total)
-    .map((point) => shortDate(point.date));
-  if (days.length === 0) return "No recorded day on this chart was cheaper.";
-  if (days.length === 1) return `Cheaper on ${days[0]}.`;
-  if (days.length <= 3) {
-    const last = days[days.length - 1];
-    return `Cheaper on ${days.slice(0, -1).join(", ")} and ${last}.`;
-  }
+    .map((point) => {
+      const gap = total - delivered(point.shelf, 0, tax);
+      return `${shortDate(point.date)} was ${money(gap)} lower`;
+    });
+  if (days.length === 0) return "This is the lowest recorded price.";
+  if (days.length <= 3) return `${days.join(". ")}.`;
   return `${days.length} recorded days on this chart were cheaper.`;
 }
 
