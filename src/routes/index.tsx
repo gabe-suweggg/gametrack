@@ -141,7 +141,7 @@ function Home() {
                     </span>
                     <span className="mt-1 block text-sm text-muted">
                       {advice.reason}
-                      <ChangeMark kind="new" />
+                      <ChangeMark kind="updated" />
                     </span>
                   </span>
                   <span className="sm:shrink-0 sm:text-right">

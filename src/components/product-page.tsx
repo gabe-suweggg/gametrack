@@ -420,7 +420,10 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
               Recommendation: {advice.title} · {advice.confidence} confidence
               <ChangeMark kind="updated" />
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-fg">{advice.reason}</p>
+            <p className="mt-2 text-sm leading-relaxed text-fg">
+              {advice.reason}
+              <ChangeMark kind="updated" />
+            </p>
           </article>
         </section>
 

@@ -149,16 +149,21 @@ export function advise(item: Product, tax: number): Advice {
   }
 
   const current = rankOffers(item.offers, tax)[0].total;
-  const low = Math.min(...item.history.map((point) => delivered(point.shelf, 0, tax)));
+  const lowPoint = item.history.reduce((lowest, point) =>
+    delivered(point.shelf, 0, tax) < delivered(lowest.shelf, 0, tax) ? point : lowest,
+  );
+  const low = delivered(lowPoint.shelf, 0, tax);
+  const lowWhen = shortDate(lowPoint.date);
   const weeks = weeksBetween(asOf, nextSale.date);
   const nearLow = current <= low * 1.03;
+  const aboveLow = money(Math.abs(current - low));
 
   if (nearLow && weeks > 6) {
     return {
       title: "Buy now",
       confidence: "moderate",
       tone: "buy",
-      reason: `Today's ${money(current)} total is near the lowest point on this chart (${money(low)}), and ${nextSale.name} is more than six weeks away. Past prices are not a guarantee.`,
+      reason: `Today's ${money(current)} is near the ${lowWhen} low (${money(low)}), and ${nextSale.name} is more than six weeks away. Past prices are not a guarantee.`,
     };
   }
 
@@ -167,7 +172,7 @@ export function advise(item: Product, tax: number): Advice {
       title: "Wait",
       confidence: "moderate",
       tone: "wait",
-      reason: `${nextSale.name} is about ${Math.round(weeks)} weeks away. Today's ${money(current)} total is above the lowest point on this chart (${money(low)}). This can be wrong.`,
+      reason: `${nextSale.name} is about ${Math.round(weeks)} weeks away. Today's ${money(current)} is ${aboveLow} above the ${lowWhen} low. This can be wrong.`,
     };
   }
 
@@ -175,7 +180,7 @@ export function advise(item: Product, tax: number): Advice {
     title: "No strong signal",
     confidence: "low",
     tone: "neutral",
-    reason: `Today's ${money(current)} total is not a clear low, and no major sale is close enough to justify waiting on this chart alone.`,
+    reason: `Today's ${money(current)} is not near the ${lowWhen} low, and no major sale is close enough to justify waiting on this chart alone.`,
   };
 }
 
