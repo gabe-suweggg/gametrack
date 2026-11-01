@@ -106,10 +106,16 @@ export function comparisons(item: Product, total: number, tax: number) {
 }
 
 export function cheaperThanToday(item: Product, total: number, tax: number) {
-  const count = item.history.filter((point) => delivered(point.shelf, 0, tax) + 0.5 < total).length;
-  if (count === 0) return "No recorded day on this chart was cheaper.";
-  if (count === 1) return "1 recorded day on this chart was cheaper.";
-  return `${count} recorded days on this chart were cheaper.`;
+  const days = item.history
+    .filter((point) => delivered(point.shelf, 0, tax) + 0.5 < total)
+    .map((point) => shortDate(point.date));
+  if (days.length === 0) return "No recorded day on this chart was cheaper.";
+  if (days.length === 1) return `Cheaper on ${days[0]}.`;
+  if (days.length <= 3) {
+    const last = days[days.length - 1];
+    return `Cheaper on ${days.slice(0, -1).join(", ")} and ${last}.`;
+  }
+  return `${days.length} recorded days on this chart were cheaper.`;
 }
 
 export const asOf = "2026-10-29";

@@ -179,7 +179,7 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
                 </p>
                 <p className="text-sm text-muted">
                   {cheaperThanToday(item, best.total, location.tax)}
-                  <ChangeMark kind="new" />
+                  <ChangeMark kind="updated" />
                 </p>
               </div>
               <label className="flex items-center gap-2 text-sm text-muted">

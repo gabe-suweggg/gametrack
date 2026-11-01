@@ -156,7 +156,7 @@ function Home() {
                     </span>
                     <span className="mt-1 block text-sm text-muted">
                       {cheaperThanToday(item, best.total, location.tax)}
-                      <ChangeMark kind="new" />
+                      <ChangeMark kind="updated" />
                     </span>
                   </span>
                   </span>
