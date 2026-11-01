@@ -151,6 +151,14 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
               Lowest of the tracked sites, including estimated sales tax (
               {(location.tax * 100).toFixed(2)}%) and shipping. Estimate only.
             </p>
+            {ranked[1] ? (
+              <p className="mt-2 text-sm text-fg">
+                {best.shelf > ranked[1].shelf
+                  ? `${best.site} lists a higher shelf price than ${ranked[1].site}, but the delivered total is ${money(ranked[1].total - best.total)} lower.`
+                  : `${best.site} is ${money(ranked[1].total - best.total)} less than ${ranked[1].site} after tax and shipping.`}
+                <ChangeMark kind="new" />
+              </p>
+            ) : null}
           </article>
 
           <article className="rounded-2xl border border-line bg-surface p-5">
