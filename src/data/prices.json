@@ -12,8 +12,22 @@
       "id": "xg32uqwms",
       "name": "ASUS XG32UQWMS 32-inch OLED Gaming Monitor",
       "specs": "32\" 4K UHD OLED · 240Hz · 0.03ms · G-SYNC Compatible",
-      "ports": "USB-C · HDMI 2.1 · DisplayPort 1.4",
+      "ports": "2x HDMI 2.1 · DisplayPort 1.4 · USB 3.2 hub",
       "image": "/monitor.jpg",
+      "details": [
+        { "label": "Panel", "value": "31.5-inch Tandem WOLED, glossy" },
+        { "label": "Resolution", "value": "3840 x 2160" },
+        { "label": "Refresh rate", "value": "240Hz at 4K, 480Hz at 1080p" },
+        { "label": "Response time", "value": "0.03 ms" },
+        { "label": "HDR", "value": "DisplayHDR 500 True Black" },
+        { "label": "Brightness", "value": "330 nits typical, 1,500 nits peak" },
+        { "label": "Color", "value": "99.5% DCI-P3, 10-bit" },
+        { "label": "Contrast", "value": "1,500,000:1" },
+        { "label": "Sync", "value": "FreeSync Premium Pro, G-SYNC Compatible" },
+        { "label": "Ports", "value": "2x HDMI 2.1, DisplayPort 1.4, headphone, 2x USB-A" },
+        { "label": "Stand", "value": "Tilt, swivel, 110 mm height, VESA 100x100" },
+        { "label": "Warranty", "value": "3 years, includes burn-in" }
+      ],
       "offers": [
         { "store": "Micro Center", "site": "microcenter.com", "shelf": 699, "shipping": 24.99 },
         { "store": "Newegg", "site": "newegg.com", "shelf": 719, "shipping": 0 },

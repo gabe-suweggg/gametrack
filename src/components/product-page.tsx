@@ -115,6 +115,21 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
             alt="32-inch OLED gaming monitor on a dark studio background"
             className="mt-6 w-full rounded-2xl border border-line bg-surface object-cover"
           />
+          <div className="mt-4 rounded-2xl border border-line bg-surface p-5">
+            <h2 className="text-sm font-medium text-muted">
+              Specifications
+              <ChangeMark kind="new" />
+            </h2>
+            <dl className="mt-3 grid gap-2">
+              {item.details.map((row) => (
+                <div key={row.label} className="grid grid-cols-[7.5rem_minmax(0,1fr)] gap-3 text-sm">
+                  <dt className="text-muted">{row.label}</dt>
+                  <dd>{row.value}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-3 text-sm text-dim">Manufacturer specifications. Not measured by GameTrack.</p>
+          </div>
         </section>
 
         <section className="flex flex-col gap-4">

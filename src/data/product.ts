@@ -25,6 +25,7 @@ export type Product = {
   specs: string;
   ports: string;
   image: string;
+  details: { label: string; value: string }[];
   offers: Offer[];
   history: PricePoint[];
 };
