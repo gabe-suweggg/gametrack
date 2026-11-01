@@ -179,7 +179,7 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
                 {sameAsToday(item, best.total, location.tax) ? (
                   <p className="text-sm text-muted">
                     {sameAsToday(item, best.total, location.tax)}
-                    <ChangeMark kind="new" />
+                    <ChangeMark kind="updated" />
                   </p>
                 ) : null}
               </div>

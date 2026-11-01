@@ -156,7 +156,7 @@ function Home() {
                     {sameAsToday(item, best.total, location.tax) ? (
                       <span className="mt-1 block text-sm text-muted">
                         {sameAsToday(item, best.total, location.tax)}
-                        <ChangeMark kind="new" />
+                        <ChangeMark kind="updated" />
                       </span>
                     ) : null}
                   </span>

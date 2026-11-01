@@ -111,9 +111,9 @@ export function sameAsToday(item: Product, total: number, tax: number) {
     .map((point) => shortDate(point.date));
   const recent = days.slice(-2);
   if (recent.length === 0) return null;
-  if (recent.length === 1) return `Same as ${recent[0]}.`;
-  if (days.length > recent.length) return `Also the same on ${recent[0]} and ${recent[1]}.`;
-  return `Same as ${recent[0]} and ${recent[1]}.`;
+  if (days.length === 1) return `Seen once, on ${recent[0]}.`;
+  if (days.length === 2) return `Seen on ${recent[0]} and ${recent[1]}.`;
+  return `Seen ${days.length} times, latest ${recent[0]} and ${recent[1]}.`;
 }
 
 export const asOf = "2026-10-29";
