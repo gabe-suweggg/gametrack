@@ -301,6 +301,7 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
                     }}
                     formatter={(value) => [money(Number(value)), "Delivered"]}
                   />
+                  <ReferenceLine y={Math.round(best.total)} stroke="var(--color-fg)" strokeWidth={1} />
                   <Line
                     type="monotone"
                     dataKey="total"
@@ -343,7 +344,9 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
               delivered total for {location.label}. The amber line is the lowest point on the
               full chart
               {lowInView ? "" : ", and it is outside the selected range"}.
-              {targetKnown ? ` The gray line is your $${target} alert.` : ""} Not a forecast.
+              {targetKnown ? ` The gray line is your $${target} alert.` : ""}{" "}
+              <span>The white line is today's price.</span> Not a forecast.
+              <ChangeMark kind="new" />
             </p>
           </article>
 
