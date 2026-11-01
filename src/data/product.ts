@@ -84,6 +84,44 @@ export function delivered(shelf: number, shipping: number, tax: number) {
   return shelf * (1 + tax) + shipping;
 }
 
+function calendarDate(iso: string) {
+  const [year, month, day] = iso.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
+function shortDate(iso: string) {
+  return calendarDate(iso).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
+export function comparisons(item: Product, total: number, tax: number) {
+  const cutoff = calendarDate(asOf);
+  cutoff.setDate(cutoff.getDate() - 30);
+  const prior = [...item.history].reverse().find((point) => calendarDate(point.date) <= cutoff);
+  let month: string | null = null;
+  if (prior) {
+    const gap = total - delivered(prior.shelf, 0, tax);
+    const when = shortDate(prior.date);
+    month =
+      Math.abs(gap) < 0.5
+        ? `Same as the ${when} price.`
+        : gap < 0
+          ? `${money(Math.abs(gap))} below the ${when} price.`
+          : `${money(gap)} above the ${when} price.`;
+  }
+  const lowPoint = item.history.reduce((lowest, point) =>
+    point.shelf < lowest.shelf ? point : lowest,
+  );
+  const gap = total - delivered(lowPoint.shelf, 0, tax);
+  const when = shortDate(lowPoint.date);
+  const low =
+    Math.abs(gap) < 0.5
+      ? `At the ${when} low.`
+      : gap > 0
+        ? `${money(gap)} above the ${when} low.`
+        : `${money(Math.abs(gap))} below the ${when} low.`;
+  return { month, low };
+}
+
 export const asOf = "2026-10-29";
 
 export const nextSale = {

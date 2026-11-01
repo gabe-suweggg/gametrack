@@ -16,7 +16,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { advise, alertStorageKey, chartDrop, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, type Product } from "@/data/product";
+import { advise, alertStorageKey, chartDrop, comparisons, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, type Product } from "@/data/product";
 import { ChangeMark, ReviewNote } from "@/components/change-mark";
 import { SiteHeader } from "@/components/site-header";
 
@@ -66,6 +66,7 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
     lowPoint.date,
   ).toLocaleDateString("en-US", { month: "short", day: "numeric" })}`;
   const best = ranked[0];
+  const compared = comparisons(item, best.total, location.tax);
   const top3 = ranked.slice(0, 3);
 
   const series = useMemo(() => {
@@ -171,6 +172,11 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
               <div>
                 <p className="text-sm text-muted">Estimated total ({location.label})</p>
                 <p className="text-5xl font-semibold tracking-tight">{money(best.total)}</p>
+                <p className="mt-2 text-sm text-muted">
+                  {compared.month}
+                  <ChangeMark kind="new" />
+                </p>
+                <p className="text-sm text-muted">{compared.low}</p>
               </div>
               <label className="flex items-center gap-2 text-sm text-muted">
                 <MapPin className="size-4 text-accent" />
