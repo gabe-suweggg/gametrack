@@ -116,6 +116,22 @@ function Home() {
                 ? `${money(Math.abs(gap))} below the ${when} price.`
                 : `${money(gap)} above the ${when} price.`;
             })();
+            const versusLow = (() => {
+              const lowPoint = item.history.reduce((lowest, point) =>
+                point.shelf < lowest.shelf ? point : lowest,
+              );
+              const lowTotal = delivered(lowPoint.shelf, 0, location.tax);
+              const gap = best.total - lowTotal;
+              const [py, pm, pd] = lowPoint.date.split("-").map(Number);
+              const when = new Date(py, pm - 1, pd).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              });
+              if (Math.abs(gap) < 0.5) return `At the ${when} low.`;
+              return gap > 0
+                ? `${money(gap)} above the ${when} low.`
+                : `${money(Math.abs(gap))} below the ${when} low.`;
+            })();
             const advice = advise(item, location.tax);
             const saved = alerts[item.id] ?? { on: true, target: "700" };
             const targetNumber = saved ? Number(saved.target) : NaN;
@@ -175,6 +191,10 @@ function Home() {
                         <ChangeMark kind="new" />
                       </span>
                     ) : null}
+                    <span className="mt-1 block text-sm text-muted">
+                      {versusLow}
+                      <ChangeMark kind="new" />
+                    </span>
                   </span>
                   </span>
                   <span>
