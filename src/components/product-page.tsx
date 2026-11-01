@@ -301,7 +301,17 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
                     }}
                     formatter={(value) => [money(Number(value)), "Delivered"]}
                   />
-                  <ReferenceLine y={Math.round(best.total)} stroke="var(--color-fg)" strokeWidth={1} />
+                  <ReferenceLine
+                    y={Math.round(best.total)}
+                    stroke="var(--color-fg)"
+                    strokeWidth={1}
+                    label={{
+                      value: `Today ${money(best.total)}`,
+                      fill: "var(--color-fg)",
+                      fontSize: 12,
+                      position: "insideTopLeft",
+                    }}
+                  />
                   <Line
                     type="monotone"
                     dataKey="total"
