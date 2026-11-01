@@ -112,7 +112,10 @@ export function sameAsToday(item: Product, total: number, tax: number) {
   const recent = days.slice(-2);
   if (recent.length === 0) return null;
   if (days.length === 1) return `Seen once, on ${recent[0]}.`;
-  if (days.length === 2) return `Seen on ${recent[0]} and ${recent[1]}.`;
+  if (days.length <= 4) {
+    const last = days[days.length - 1];
+    return `Seen on ${days.slice(0, -1).join(", ")}, and ${last}.`;
+  }
   return `Seen ${days.length} times, latest ${recent[0]} and ${recent[1]}.`;
 }
 
