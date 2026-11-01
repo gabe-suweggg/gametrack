@@ -17,8 +17,8 @@ import {
   sameAsToday,
 } from "@/data/product";
 
-function historyLine(values: number[], target: number | null) {
-  const prices = target == null ? values : [...values, target];
+function historyLine(values: number[], target: number | null, today: number) {
+  const prices = target == null ? [...values, today] : [...values, target, today];
   const min = Math.min(...prices);
   const max = Math.max(...prices);
   const low = Math.min(...values);
@@ -34,6 +34,7 @@ function historyLine(values: number[], target: number | null) {
     points,
     line: points.map((point) => `${point.x},${point.y}`).join(" "),
     targetY: target == null ? null : y(target),
+    todayY: y(today),
   };
 }
 
@@ -181,6 +182,7 @@ function Home() {
                       const history = historyLine(
                         item.history.map((point) => delivered(point.shelf, 0, location.tax)),
                         showAlert ? targetNumber : null,
+                        best.total,
                       );
                       const low = history.points.find((point) => point.low);
                       return (
@@ -191,6 +193,14 @@ function Home() {
                             role="img"
                             aria-label="Sample delivered price history"
                           >
+                            <line
+                              x1="0"
+                              x2="320"
+                              y1={history.todayY}
+                              y2={history.todayY}
+                              stroke="var(--color-fg)"
+                              strokeWidth="1"
+                            />
                             <polyline
                               fill="none"
                               stroke="currentColor"
@@ -213,6 +223,10 @@ function Home() {
                             Dot is the {lowWhen} low,{" "}
                             {money(delivered(lowPoint.shelf, 0, location.tax))} delivered in{" "}
                             {location.label}.
+                          </span>
+                          <span className="mt-1 block text-sm text-muted">
+                            White line is today's price.
+                            <ChangeMark kind="new" />
                           </span>
                           {showAlert ? (
                             <span className="mt-1 block text-sm text-muted">
