@@ -11,12 +11,13 @@ import {
   locationFromSearch,
   locations,
   money,
+  monthAgoPoint,
   parseAlert,
   products,
   rankOffers,
 } from "@/data/product";
 
-function historyLine(values: number[], target: number | null) {
+function historyLine(values: number[], target: number | null, monthIndex: number) {
   const prices = target == null ? values : [...values, target];
   const min = Math.min(...prices);
   const max = Math.max(...prices);
@@ -28,6 +29,7 @@ function historyLine(values: number[], target: number | null) {
     x: (index / (values.length - 1)) * width,
     y: y(value),
     low: value === low,
+    month: index === monthIndex,
   }));
   return {
     points,
@@ -178,11 +180,17 @@ function Home() {
                         month: "short",
                         day: "numeric",
                       });
+                      const monthPoint = monthAgoPoint(item);
+                      const monthIndex = monthPoint
+                        ? item.history.findIndex((point) => point.date === monthPoint.date)
+                        : -1;
                       const history = historyLine(
                         item.history.map((point) => delivered(point.shelf, 0, location.tax)),
                         showAlert ? targetNumber : null,
+                        monthIndex,
                       );
                       const low = history.points.find((point) => point.low);
+                      const monthDot = history.points.find((point) => point.month);
                       return (
                         <>
                           <svg
@@ -208,12 +216,36 @@ function Home() {
                               />
                             ) : null}
                             {low ? <circle cx={low.x} cy={low.y} r="4" fill="currentColor" /> : null}
+                            {monthDot ? (
+                              <circle
+                                cx={monthDot.x}
+                                cy={monthDot.y}
+                                r="5"
+                                fill="var(--color-bg)"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                              />
+                            ) : null}
                           </svg>
                           <span className="mt-1 block text-sm text-muted">
                             Dot is the {lowWhen} low,{" "}
                             {money(delivered(lowPoint.shelf, 0, location.tax))} delivered in{" "}
                             {location.label}.
                           </span>
+                          {monthPoint ? (
+                            <span className="mt-1 block text-sm text-muted">
+                              Outlined dot is{" "}
+                              {(() => {
+                                const [my, mm, md] = monthPoint.date.split("-").map(Number);
+                                return new Date(my, mm - 1, md).toLocaleDateString("en-US", {
+                                  month: "short",
+                                  day: "numeric",
+                                });
+                              })()}
+                              .
+                              <ChangeMark kind="new" />
+                            </span>
+                          ) : null}
                           {showAlert ? (
                             <span className="mt-1 block text-sm text-muted">
                               Dashed line is your ${saved.target} alert.
