@@ -218,6 +218,14 @@ function Home() {
                               />
                             ) : null}
                             {low ? <circle cx={low.x} cy={low.y} r="4" fill="currentColor" /> : null}
+                            <text
+                              x="4"
+                              y={Math.max(12, history.todayY - 4)}
+                              fill="var(--color-fg)"
+                              fontSize="11"
+                            >
+                              Today {money(best.total)}
+                            </text>
                           </svg>
                           <span className="mt-1 block text-sm text-muted">
                             Dot is the {lowWhen} low,{" "}
