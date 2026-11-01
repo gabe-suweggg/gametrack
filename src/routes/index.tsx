@@ -120,6 +120,11 @@ function Home() {
                   <span className="min-w-0 flex-1">
                     <span className="block text-lg font-semibold">{item.name}</span>
                     <span className="mt-1 block text-sm text-muted">{item.specs}</span>
+                    <span className="mt-1 block text-sm text-muted">
+                      Desk space: {item.size[0].value.split(",")[0]} ·{" "}
+                      {item.size[0].value.split("·")[1]?.trim()} with stand
+                      <ChangeMark kind="new" />
+                    </span>
                     {showAlert ? (
                       <span className="mt-2 block text-sm text-accent">
                         Alert under ${saved.target} · today's {money(best.total)} is{" "}
