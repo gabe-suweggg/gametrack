@@ -28,6 +28,7 @@ export type Product = {
   details: { label: string; value: string }[];
   size: { label: string; value: string }[];
   inbox: string[];
+  specUrl: string;
   offers: Offer[];
   history: PricePoint[];
 };

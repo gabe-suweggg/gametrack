@@ -156,6 +156,12 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
               ))}
             </ul>
             <p className="mt-3 text-sm text-dim">ASUS list. Contents can vary by region.</p>
+            <p className="mt-3 text-sm">
+              <a href={item.specUrl} className="text-accent" target="_blank" rel="noreferrer">
+                Check these specs on ASUS
+              </a>
+              <ChangeMark kind="new" />
+            </p>
           </div>
         </section>
 
