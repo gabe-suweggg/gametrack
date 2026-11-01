@@ -13,6 +13,7 @@ import {
   parseAlert,
   products,
   rankOffers,
+  asOf,
 } from "@/data/product";
 
 function historyLine(values: number[], target: number | null) {
@@ -94,6 +95,27 @@ function Home() {
           {products.map((item) => {
             const ranked = rankOffers(item.offers, location.tax);
             const best = ranked[0];
+            const monthAgo = (() => {
+              const [year, month, day] = asOf.split("-").map(Number);
+              const cutoff = new Date(year, month - 1, day);
+              cutoff.setDate(cutoff.getDate() - 30);
+              const prior = [...item.history].reverse().find((point) => {
+                const [py, pm, pd] = point.date.split("-").map(Number);
+                return new Date(py, pm - 1, pd) <= cutoff;
+              });
+              if (!prior) return null;
+              const then = delivered(prior.shelf, 0, location.tax);
+              const gap = best.total - then;
+              const [py, pm, pd] = prior.date.split("-").map(Number);
+              const when = new Date(py, pm - 1, pd).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              });
+              if (Math.abs(gap) < 0.5) return `Same as the ${when} price.`;
+              return gap < 0
+                ? `${money(Math.abs(gap))} below the ${when} price.`
+                : `${money(gap)} above the ${when} price.`;
+            })();
             const advice = advise(item, location.tax);
             const saved = alerts[item.id] ?? { on: true, target: "700" };
             const targetNumber = saved ? Number(saved.target) : NaN;
@@ -147,6 +169,12 @@ function Home() {
                       Delivered in {location.label} · {best.site}
                       <ChangeMark kind="updated" />
                     </span>
+                    {monthAgo ? (
+                      <span className="mt-1 block text-sm text-muted">
+                        {monthAgo}
+                        <ChangeMark kind="new" />
+                      </span>
+                    ) : null}
                   </span>
                   </span>
                   <span>
