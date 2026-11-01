@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import {
   advise,
   alertStorageKey,
+  chartDrop,
   cheaperThanToday,
   delivered,
   locationFromSearch,
@@ -98,6 +99,7 @@ function Home() {
             const ranked = rankOffers(item.offers, location.tax);
             const best = ranked[0];
             const advice = advise(item, location.tax);
+            const drop = chartDrop(item);
             const saved = alerts[item.id] ?? { on: true, target: "700" };
             const targetNumber = saved ? Number(saved.target) : NaN;
             const showAlert = saved?.on === true && Number.isFinite(targetNumber) && targetNumber > 0;
@@ -143,6 +145,13 @@ function Home() {
                       {advice.reason}
                       <ChangeMark kind="updated" />
                     </span>
+                    {drop ? (
+                      <span className="mt-1 block text-sm text-muted">
+                        Last December the shelf price went from {money(drop.from.shelf)} to{" "}
+                        {money(drop.to.shelf)}. History, not a prediction.
+                        <ChangeMark kind="new" />
+                      </span>
+                    ) : null}
                   </span>
                   <span className="sm:shrink-0 sm:text-right">
                     <span className="block text-2xl font-semibold">{money(best.total)}</span>
