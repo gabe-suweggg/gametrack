@@ -217,7 +217,12 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
                     tick={{ fill: "var(--color-muted)", fontSize: 12 }}
                     axisLine={false}
                     tickLine={false}
-                    domain={["dataMin - 30", "dataMax + 30"]}
+                    domain={[
+                      (dataMin: number) =>
+                        Math.floor(Math.min(dataMin, targetKnown ? targetNumber : dataMin) - 30),
+                      (dataMax: number) =>
+                        Math.ceil(Math.max(dataMax, targetKnown ? targetNumber : dataMax) + 30),
+                    ]}
                     tickFormatter={(v: number) => `$${v}`}
                   />
                   <Tooltip
@@ -250,14 +255,29 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
                       }}
                     />
                   ) : null}
+                  {targetKnown ? (
+                    <ReferenceLine
+                      y={targetNumber}
+                      stroke="var(--color-muted)"
+                      strokeDasharray="2 4"
+                      label={{
+                        value: `Alert $${target}`,
+                        fill: "var(--color-muted)",
+                        fontSize: 12,
+                        position: "insideBottomLeft",
+                      }}
+                    />
+                  ) : null}
                 </LineChart>
               </ResponsiveContainer>
             </div>
             <p className="mt-2 text-sm text-muted">
               Each point is the lowest shelf price recorded that day, shown as an estimated
-              delivered total for {location.label}. The dashed line is the lowest point on the
+              delivered total for {location.label}. The amber line is the lowest point on the
               full chart
-              {lowInView ? "" : ", and it is outside the selected range"}. Not a forecast.
+              {lowInView ? "" : ", and it is outside the selected range"}.
+              {targetKnown ? ` The gray line is your $${target} alert.` : ""} Not a forecast.
+              {targetKnown ? <ChangeMark kind="new" /> : null}
             </p>
           </article>
 
