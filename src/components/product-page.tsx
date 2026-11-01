@@ -10,14 +10,13 @@ import {
   CartesianGrid,
   Line,
   LineChart,
-  ReferenceDot,
   ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
-import { advise, alertStorageKey, chartDrop, comparisons, delivered, locations, money, monthAgoPoint, nextSale, parseAlert, ranges, rankOffers, type Product } from "@/data/product";
+import { advise, alertStorageKey, chartDrop, comparisons, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, type Product } from "@/data/product";
 import { ChangeMark, ReviewNote } from "@/components/change-mark";
 import { SiteHeader } from "@/components/site-header";
 
@@ -86,8 +85,6 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
       }));
   }, [item, location, rangeId]);
 
-  const monthPoint = monthAgoPoint(item);
-  const monthInView = series.find((point) => point.date === monthPoint?.date);
   const lowInView = series.some((point) => point.total === lowTotal);
 
   const advice = advise(item, location.tax);
@@ -177,10 +174,9 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
                 <p className="text-sm text-muted">Estimated total ({location.label})</p>
                 <p className="text-5xl font-semibold tracking-tight">{money(best.total)}</p>
                 <p className="mt-2 text-sm text-muted">
-                  {compared.month}
-                  <ChangeMark kind="new" />
+                  {compared}
+                  <ChangeMark kind="updated" />
                 </p>
-                <p className="text-sm text-muted">{compared.low}</p>
               </div>
               <label className="flex items-center gap-2 text-sm text-muted">
                 <MapPin className="size-4 text-accent" />
@@ -334,16 +330,6 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
                       }}
                     />
                   ) : null}
-                  {monthInView ? (
-                    <ReferenceDot
-                      x={monthInView.label}
-                      y={monthInView.total}
-                      r={7}
-                      fill="var(--color-fg)"
-                      stroke="var(--color-accent)"
-                      strokeWidth={3}
-                    />
-                  ) : null}
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -353,13 +339,6 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
               full chart
               {lowInView ? "" : ", and it is outside the selected range"}.
               {targetKnown ? ` The gray line is your $${target} alert.` : ""} Not a forecast.
-              {monthPoint ? (
-                <>
-                  {" "}
-                  The outlined dot is {chartDate(monthPoint.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}.
-                  <ChangeMark kind="new" />
-                </>
-              ) : null}
             </p>
           </article>
 
