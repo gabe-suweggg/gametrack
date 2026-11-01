@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import {
   advise,
   alertStorageKey,
+  cheaperThanToday,
   comparisons,
   delivered,
   locationFromSearch,
@@ -152,6 +153,10 @@ function Home() {
                     <span className="mt-1 block text-sm text-muted">
                       {compared}
                       <ChangeMark kind="updated" />
+                    </span>
+                    <span className="mt-1 block text-sm text-muted">
+                      {cheaperThanToday(item, best.total, location.tax)}
+                      <ChangeMark kind="new" />
                     </span>
                   </span>
                   </span>

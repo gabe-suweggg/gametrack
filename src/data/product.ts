@@ -105,6 +105,13 @@ export function comparisons(item: Product, total: number, tax: number) {
     : `${money(Math.abs(gap))} below the ${when} low.`;
 }
 
+export function cheaperThanToday(item: Product, total: number, tax: number) {
+  const count = item.history.filter((point) => delivered(point.shelf, 0, tax) + 0.5 < total).length;
+  if (count === 0) return "No recorded day on this chart was cheaper.";
+  if (count === 1) return "1 recorded day on this chart was cheaper.";
+  return `${count} recorded days on this chart were cheaper.`;
+}
+
 export const asOf = "2026-10-29";
 
 export const nextSale = {
