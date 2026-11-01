@@ -225,8 +225,8 @@ function Home() {
                             {location.label}.
                           </span>
                           <span className="mt-1 block text-sm text-muted">
-                            White line is today's price.
-                            <ChangeMark kind="new" />
+                            White line is today's {money(best.total)}.
+                            <ChangeMark kind="updated" />
                           </span>
                           {showAlert ? (
                             <span className="mt-1 block text-sm text-muted">

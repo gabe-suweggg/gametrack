@@ -345,8 +345,8 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
               full chart
               {lowInView ? "" : ", and it is outside the selected range"}.
               {targetKnown ? ` The gray line is your $${target} alert.` : ""}{" "}
-              <span>The white line is today's price.</span> Not a forecast.
-              <ChangeMark kind="new" />
+              <span>The white line is today's {money(best.total)}.</span> Not a forecast.
+              <ChangeMark kind="updated" />
             </p>
           </article>
 
