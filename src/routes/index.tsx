@@ -185,6 +185,20 @@ function Home() {
                         best.total,
                       );
                       const low = history.points.find((point) => point.low);
+                      const other = item.history.flatMap((point, index) => {
+                        const total = delivered(point.shelf, 0, location.tax);
+                        if (total + 0.5 >= best.total || point.date === lowPoint.date) return [];
+                        const [py, pm, pd] = point.date.split("-").map(Number);
+                        return [
+                          {
+                            when: new Date(py, pm - 1, pd).toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                            }),
+                            spot: history.points[index],
+                          },
+                        ];
+                      });
                       return (
                         <>
                           <svg
@@ -226,6 +240,18 @@ function Home() {
                             >
                               Today {money(best.total)}
                             </text>
+                            {other.map((mark) => (
+                              <text
+                                key={mark.when}
+                                x={mark.spot.x}
+                                y={Math.max(12, mark.spot.y - 8)}
+                                fill="var(--color-fg)"
+                                fontSize="11"
+                                textAnchor="middle"
+                              >
+                                {mark.when}
+                              </text>
+                            ))}
                           </svg>
                           <span className="mt-1 block text-sm text-muted">
                             Dot is the {lowWhen} low,{" "}
@@ -236,6 +262,14 @@ function Home() {
                             White line is today's {money(best.total)}.
                             <ChangeMark kind="updated" />
                           </span>
+                          {other.length > 0 ? (
+                            <span className="mt-1 block text-sm text-muted">
+                              {other.length === 1
+                                ? `${other[0].when} is the other cheaper day.`
+                                : `${other.map((mark) => mark.when).join(", ")} are the other cheaper days.`}
+                              <ChangeMark kind="new" />
+                            </span>
+                          ) : null}
                           {showAlert ? (
                             <span className="mt-1 block text-sm text-muted">
                               Dashed line is your ${saved.target} alert.

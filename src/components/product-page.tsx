@@ -10,6 +10,7 @@ import {
   CartesianGrid,
   Line,
   LineChart,
+  ReferenceDot,
   ReferenceLine,
   ResponsiveContainer,
   Tooltip,
@@ -85,6 +86,7 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
   }, [item, location, rangeId]);
 
   const lowInView = series.some((point) => point.total === lowTotal);
+  const otherCheaper = series.filter((point) => point.total + 0.5 < Math.round(best.total) && point.total !== lowTotal);
 
   const advice = advise(item, location.tax);
   const drop = chartDrop(item);
@@ -312,6 +314,23 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
                       position: "insideTopLeft",
                     }}
                   />
+                  {otherCheaper.map((point) => (
+                    <ReferenceDot
+                      key={point.date}
+                      x={point.label}
+                      y={point.total}
+                      r={5}
+                      fill="var(--color-bg)"
+                      stroke="var(--color-accent)"
+                      strokeWidth={2}
+                      label={{
+                        value: point.label,
+                        position: "top",
+                        fill: "var(--color-fg)",
+                        fontSize: 12,
+                      }}
+                    />
+                  ))}
                   <Line
                     type="monotone"
                     dataKey="total"
@@ -355,8 +374,17 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
               full chart
               {lowInView ? "" : ", and it is outside the selected range"}.
               {targetKnown ? ` The gray line is your $${target} alert.` : ""}{" "}
-              <span>The white line is today's {money(best.total)}.</span> Not a forecast.
-              <ChangeMark kind="updated" />
+              <span>The white line is today's {money(best.total)}.</span>
+              {otherCheaper.length > 0 ? (
+                <span>
+                  {" "}
+                  {otherCheaper.length === 1
+                    ? `${otherCheaper[0].label} is the other cheaper day.`
+                    : `${otherCheaper.map((point) => point.label).join(", ")} are the other cheaper days.`}
+                </span>
+              ) : null}{" "}
+              Not a forecast.
+              <ChangeMark kind="new" />
             </p>
           </article>
 
