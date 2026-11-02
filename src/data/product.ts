@@ -189,6 +189,21 @@ export function winnerReason(offers: { site: string; shelf: number; total: numbe
   return `${best.site} is ${money(next.total - best.total)} less than ${next.site} after tax and shipping.`;
 }
 
+export function shippingBeatsShelf(
+  offers: { site: string; shelf: number; shipping: number; taxAmount: number }[],
+) {
+  const [best, next] = offers;
+  if (!next || best.shelf <= next.shelf) return null;
+  const shipGap = next.shipping - best.shipping;
+  if (shipGap < 0.5) return null;
+  const shelfSave = best.shelf - next.shelf;
+  const taxSave = best.taxAmount - next.taxAmount;
+  if (taxSave > 0.5) {
+    return `${next.site} saves ${money(shelfSave)} on the shelf and ${money(taxSave)} in tax, then pays ${money(shipGap)} to ship.`;
+  }
+  return `${next.site} saves ${money(shelfSave)} on the shelf, then pays ${money(shipGap)} to ship.`;
+}
+
 export type Advice = {
   title: "Buy now" | "Wait" | "No strong signal" | "Insufficient data";
   confidence: "moderate" | "low";
