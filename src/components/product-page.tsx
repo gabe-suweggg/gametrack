@@ -17,7 +17,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { advise, alertStorageKey, alertUnderLow, asOf, asOfText, chartDrop, cheaperThanToday, checkAgainLabel, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, sameAsToday, versusDecember, type Product } from "@/data/product";
+import { advise, alertStorageKey, alertUnderLow, asOf, asOfText, chartDrop, cheaperThanToday, checkAgainLabel, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, sameAsToday, suggestedAlert, versusDecember, type Product } from "@/data/product";
 import { ChangeMark, ReviewNote } from "@/components/change-mark";
 import { SiteHeader } from "@/components/site-header";
 
@@ -100,6 +100,8 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
 
   const targetNumber = Number(target);
   const targetKnown = alertOn && Number.isFinite(targetNumber) && targetNumber > 0;
+  const suggestion = suggestedAlert(item, location.tax);
+  const alertTooLow = targetKnown ? alertUnderLow(item, targetNumber, location.tax) : null;
 
   return (
     <div className="min-h-screen bg-bg text-fg">
@@ -461,11 +463,24 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
                   className="w-24 rounded-lg border border-line bg-surface-2 px-3 py-2 text-fg"
                 />
               </div>
-              {targetKnown && alertUnderLow(item, targetNumber, location.tax) ? (
-                <p className="mt-3 text-sm text-muted">
-                  {alertUnderLow(item, targetNumber, location.tax)}
-                  <ChangeMark kind="new" />
-                </p>
+              {alertTooLow ? (
+                <>
+                  <p className="mt-3 text-sm text-muted">
+                    {alertTooLow}
+                    <ChangeMark kind="new" />
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTarget(String(suggestion.amount));
+                      setAlertOn(true);
+                    }}
+                    className="mt-3 rounded-lg border border-line bg-surface-2 px-3 py-2 text-left text-sm"
+                  >
+                    {suggestion.label}
+                    <ChangeMark kind="new" />
+                  </button>
+                </>
               ) : null}
             </div>
             <button

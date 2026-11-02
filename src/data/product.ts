@@ -153,6 +153,20 @@ export function alertUnderLow(item: Product, target: number, tax: number) {
   return `A ${shown.startsWith("$") ? shown : `$${shown}`} alert is ${money(low - target)} under the ${shortDate(lowPoint.date)} low. This chart has not been that low.`;
 }
 
+export function suggestedAlert(item: Product, tax: number) {
+  const lowPoint = item.history.reduce((lowest, point) =>
+    delivered(point.shelf, 0, tax) < delivered(lowest.shelf, 0, tax) ? point : lowest,
+  );
+  const low = delivered(lowPoint.shelf, 0, tax);
+  const amount = Math.ceil(low - 1e-9);
+  const when = shortDate(lowPoint.date);
+  const label =
+    amount > low + 0.01
+      ? `Use $${amount}. That is the ${when} low, rounded up.`
+      : `Use $${amount}. That is the ${when} low.`;
+  return { amount, label };
+}
+
 export type Advice = {
   title: "Buy now" | "Wait" | "No strong signal" | "Insufficient data";
   confidence: "moderate" | "low";
