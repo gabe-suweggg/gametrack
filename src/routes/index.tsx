@@ -19,6 +19,7 @@ import {
   products,
   rankOffers,
   sameAsToday,
+  suggestedAlert,
   versusDecember,
 } from "@/data/product";
 
@@ -149,6 +150,25 @@ function Home() {
                         {alertUnderLow(item, targetNumber, location.tax)}
                         <ChangeMark kind="new" />
                       </span>
+                    ) : null}
+                    {showAlert && alertUnderLow(item, targetNumber, location.tax) ? (
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          const next = {
+                            on: true,
+                            target: String(suggestedAlert(item, location.tax).amount),
+                          };
+                          localStorage.setItem(alertStorageKey(item.id), JSON.stringify(next));
+                          setAlerts((current) => ({ ...current, [item.id]: next }));
+                        }}
+                        className="mt-2 rounded-lg border border-line bg-surface-2 px-3 py-2 text-left text-sm text-fg"
+                      >
+                        {suggestedAlert(item, location.tax).label}
+                        <ChangeMark kind="new" />
+                      </button>
                     ) : null}
                     <span className="mt-1 block text-sm text-muted">
                       Recommendation: {advice.title}
