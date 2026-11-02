@@ -485,6 +485,12 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
                     {suggestion.amount}.
                     <ChangeMark kind="new" />
                   </p>
+                  {suggestion.low < suggestion.amount ? (
+                    <p className="mt-2 text-sm text-muted">
+                      {suggestion.when} was under ${suggestion.amount}, so that alert would already have matched.
+                      <ChangeMark kind="new" />
+                    </p>
+                  ) : null}
                 </>
               ) : null}
             </div>

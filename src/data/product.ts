@@ -164,7 +164,7 @@ export function suggestedAlert(item: Product, tax: number) {
     amount > low + 0.01
       ? `Use $${amount}. That is the ${when} low, rounded up.`
       : `Use $${amount}. That is the ${when} low.`;
-  return { amount, label };
+  return { amount, label, when, low };
 }
 
 export type Advice = {

@@ -179,6 +179,13 @@ function Home() {
                         <ChangeMark kind="new" />
                       </span>
                     ) : null}
+                    {alertTooLow && suggestion.low < suggestion.amount ? (
+                      <span className="mt-1 block text-sm text-muted">
+                        {suggestion.when} was under ${suggestion.amount}, so that alert would already have
+                        matched.
+                        <ChangeMark kind="new" />
+                      </span>
+                    ) : null}
                     <span className="mt-1 block text-sm text-muted">
                       Recommendation: {advice.title}
                       <ChangeMark kind="new" />
