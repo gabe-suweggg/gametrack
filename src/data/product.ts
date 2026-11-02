@@ -172,14 +172,12 @@ export function storesVersusLow(
   low: number,
   when: string,
 ) {
-  const under = offers.filter((offer) => offer.total + 0.5 < low);
-  if (under.length === 0) return `None of these three are under the ${when} low.`;
-  if (under.length === 1) return `${under[0].site} is under the ${when} low.`;
-  const last = under[under.length - 1].site;
-  return `${under
-    .slice(0, -1)
-    .map((offer) => offer.site)
-    .join(", ")} and ${last} are under the ${when} low.`;
+  return offers.map((offer) => {
+    const gap = offer.total - low;
+    if (gap < -0.5) return `${offer.site} is ${money(Math.abs(gap))} under the ${when} low.`;
+    if (Math.abs(gap) < 0.5) return `${offer.site} matches the ${when} low.`;
+    return `${offer.site} is ${money(gap)} above the ${when} low.`;
+  });
 }
 
 export type Advice = {

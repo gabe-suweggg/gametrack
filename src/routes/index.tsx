@@ -362,7 +362,7 @@ function Home() {
                       );
                     })()}
                   </span>
-                  <span>
+                  <span className="min-w-0">
                     <span className="text-sm text-muted">
                       Cheapest right now
                       <ChangeMark kind="updated" />
@@ -383,9 +383,15 @@ function Home() {
                         </li>
                       ))}
                     </ol>
-                    <span className="mt-2 block text-sm text-muted">
-                      {storesVersusLow(ranked.slice(0, 3), suggestion.low, suggestion.when)}
-                      <ChangeMark kind="new" />
+                    <span className="mt-2 block min-w-0 text-sm text-muted">
+                      {storesVersusLow(ranked.slice(0, 3), suggestion.low, suggestion.when).map(
+                        (line) => (
+                          <span key={line} className="mt-1 block">
+                            {line}
+                          </span>
+                        ),
+                      )}
+                      <ChangeMark kind="updated" />
                     </span>
                   </span>
                 </Link>

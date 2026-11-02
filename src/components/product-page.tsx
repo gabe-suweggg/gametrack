@@ -251,8 +251,12 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
               ))}
             </ol>
             <p className="mt-3 text-sm text-muted">
-              {storesVersusLow(top3, suggestion.low, suggestion.when)}
-              <ChangeMark kind="new" />
+              {storesVersusLow(top3, suggestion.low, suggestion.when).map((line) => (
+                <span key={line} className="mt-1 block">
+                  {line}
+                </span>
+              ))}
+              <ChangeMark kind="updated" />
             </p>
           </article>
 
