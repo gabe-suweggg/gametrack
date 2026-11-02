@@ -111,6 +111,8 @@ function Home() {
             const saved = alerts[item.id] ?? { on: true, target: "700" };
             const targetNumber = saved ? Number(saved.target) : NaN;
             const showAlert = saved?.on === true && Number.isFinite(targetNumber) && targetNumber > 0;
+            const suggestion = suggestedAlert(item, location.tax);
+            const alertTooLow = showAlert ? alertUnderLow(item, targetNumber, location.tax) : null;
             return (
               <li key={item.id}>
                 <Link
@@ -145,13 +147,13 @@ function Home() {
                         <ChangeMark kind="new" />
                       </span>
                     ) : null}
-                    {showAlert && alertUnderLow(item, targetNumber, location.tax) ? (
+                    {alertTooLow ? (
                       <span className="mt-1 block text-sm text-muted">
-                        {alertUnderLow(item, targetNumber, location.tax)}
+                        {alertTooLow}
                         <ChangeMark kind="new" />
                       </span>
                     ) : null}
-                    {showAlert && alertUnderLow(item, targetNumber, location.tax) ? (
+                    {alertTooLow ? (
                       <button
                         type="button"
                         onClick={(event) => {
@@ -159,16 +161,23 @@ function Home() {
                           event.stopPropagation();
                           const next = {
                             on: true,
-                            target: String(suggestedAlert(item, location.tax).amount),
+                            target: String(suggestion.amount),
                           };
                           localStorage.setItem(alertStorageKey(item.id), JSON.stringify(next));
                           setAlerts((current) => ({ ...current, [item.id]: next }));
                         }}
                         className="mt-2 rounded-lg border border-line bg-surface-2 px-3 py-2 text-left text-sm text-fg"
                       >
-                        {suggestedAlert(item, location.tax).label}
+                        {suggestion.label}
                         <ChangeMark kind="new" />
                       </button>
+                    ) : null}
+                    {alertTooLow ? (
+                      <span className="mt-1 block text-sm text-muted">
+                        Today's {money(best.total)} is {money(best.total - suggestion.amount)} above $
+                        {suggestion.amount}.
+                        <ChangeMark kind="new" />
+                      </span>
                     ) : null}
                     <span className="mt-1 block text-sm text-muted">
                       Recommendation: {advice.title}

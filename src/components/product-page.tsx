@@ -480,6 +480,11 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
                     {suggestion.label}
                     <ChangeMark kind="new" />
                   </button>
+                  <p className="mt-2 text-sm text-muted">
+                    Today's {money(best.total)} is {money(best.total - suggestion.amount)} above $
+                    {suggestion.amount}.
+                    <ChangeMark kind="new" />
+                  </p>
                 </>
               ) : null}
             </div>
