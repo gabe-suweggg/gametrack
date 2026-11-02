@@ -142,6 +142,17 @@ export function checkAgainLabel() {
   return `Check again the week of ${when}. The price may not drop.`;
 }
 
+export function alertUnderLow(item: Product, target: number, tax: number) {
+  if (!Number.isFinite(target) || target <= 0) return null;
+  const lowPoint = item.history.reduce((lowest, point) =>
+    delivered(point.shelf, 0, tax) < delivered(lowest.shelf, 0, tax) ? point : lowest,
+  );
+  const low = delivered(lowPoint.shelf, 0, tax);
+  if (target + 0.5 >= low) return null;
+  const shown = Number.isInteger(target) ? String(target) : money(target);
+  return `A ${shown.startsWith("$") ? shown : `$${shown}`} alert is ${money(low - target)} under the ${shortDate(lowPoint.date)} low. This chart has not been that low.`;
+}
+
 export type Advice = {
   title: "Buy now" | "Wait" | "No strong signal" | "Insufficient data";
   confidence: "moderate" | "low";

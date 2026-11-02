@@ -17,7 +17,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { advise, alertStorageKey, asOf, asOfText, chartDrop, cheaperThanToday, checkAgainLabel, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, sameAsToday, versusDecember, type Product } from "@/data/product";
+import { advise, alertStorageKey, alertUnderLow, asOf, asOfText, chartDrop, cheaperThanToday, checkAgainLabel, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, sameAsToday, versusDecember, type Product } from "@/data/product";
 import { ChangeMark, ReviewNote } from "@/components/change-mark";
 import { SiteHeader } from "@/components/site-header";
 
@@ -461,6 +461,12 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
                   className="w-24 rounded-lg border border-line bg-surface-2 px-3 py-2 text-fg"
                 />
               </div>
+              {targetKnown && alertUnderLow(item, targetNumber, location.tax) ? (
+                <p className="mt-3 text-sm text-muted">
+                  {alertUnderLow(item, targetNumber, location.tax)}
+                  <ChangeMark kind="new" />
+                </p>
+              ) : null}
             </div>
             <button
               type="button"

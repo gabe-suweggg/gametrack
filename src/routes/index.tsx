@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import {
   advise,
   alertStorageKey,
+  alertUnderLow,
   asOfText,
   chartDrop,
   cheaperThanToday,
@@ -140,6 +141,12 @@ function Home() {
                       <span className="mt-2 block text-sm text-accent">
                         Alert under ${saved.target} · today's {money(best.total)} is{" "}
                         {best.total <= targetNumber ? "already at or below it" : "above it"}
+                        <ChangeMark kind="new" />
+                      </span>
+                    ) : null}
+                    {showAlert && alertUnderLow(item, targetNumber, location.tax) ? (
+                      <span className="mt-1 block text-sm text-muted">
+                        {alertUnderLow(item, targetNumber, location.tax)}
                         <ChangeMark kind="new" />
                       </span>
                     ) : null}
