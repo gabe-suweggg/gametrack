@@ -294,6 +294,17 @@ function Home() {
                                 strokeDasharray="4 4"
                               />
                             ) : null}
+                            {history.targetY != null ? (
+                              <text
+                                x="316"
+                                y={Math.max(11, history.targetY - 3)}
+                                textAnchor="end"
+                                fill="var(--color-warn)"
+                                fontSize="11"
+                              >
+                                Alert ${saved.target}
+                              </text>
+                            ) : null}
                             {low ? <circle cx={low.x} cy={low.y} r="4" fill="currentColor" /> : null}
                             <text
                               x="4"
@@ -335,8 +346,8 @@ function Home() {
                           ) : null}
                           {showAlert ? (
                             <span className="mt-1 block text-sm text-muted">
-                              Dashed line is your ${saved.target} alert.
-                              <ChangeMark kind="new" />
+                              Dashed line is labeled Alert ${saved.target}.
+                              <ChangeMark kind="updated" />
                             </span>
                           ) : null}
                         </>
