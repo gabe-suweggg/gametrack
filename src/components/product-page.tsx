@@ -17,7 +17,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { advise, alertStorageKey, alertUnderLow, asOf, asOfText, chartDrop, cheaperThanToday, checkAgainLabel, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, sameAsToday, suggestedAlert, versusDecember, type Product } from "@/data/product";
+import { advise, alertStorageKey, alertUnderLow, asOf, asOfText, chartDrop, cheaperThanToday, checkAgainLabel, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, sameAsToday, storesVersusLow, suggestedAlert, versusDecember, type Product } from "@/data/product";
 import { ChangeMark, ReviewNote } from "@/components/change-mark";
 import { SiteHeader } from "@/components/site-header";
 
@@ -250,6 +250,10 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
                 </li>
               ))}
             </ol>
+            <p className="mt-3 text-sm text-muted">
+              {storesVersusLow(top3, suggestion.low, suggestion.when)}
+              <ChangeMark kind="new" />
+            </p>
           </article>
 
           <article className="rounded-2xl border border-line bg-surface p-5">

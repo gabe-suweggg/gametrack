@@ -167,6 +167,21 @@ export function suggestedAlert(item: Product, tax: number) {
   return { amount, label, when, low };
 }
 
+export function storesVersusLow(
+  offers: { site: string; total: number }[],
+  low: number,
+  when: string,
+) {
+  const under = offers.filter((offer) => offer.total + 0.5 < low);
+  if (under.length === 0) return `None of these three are under the ${when} low.`;
+  if (under.length === 1) return `${under[0].site} is under the ${when} low.`;
+  const last = under[under.length - 1].site;
+  return `${under
+    .slice(0, -1)
+    .map((offer) => offer.site)
+    .join(", ")} and ${last} are under the ${when} low.`;
+}
+
 export type Advice = {
   title: "Buy now" | "Wait" | "No strong signal" | "Insufficient data";
   confidence: "moderate" | "low";

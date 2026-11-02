@@ -19,6 +19,7 @@ import {
   products,
   rankOffers,
   sameAsToday,
+  storesVersusLow,
   suggestedAlert,
   versusDecember,
 } from "@/data/product";
@@ -382,6 +383,10 @@ function Home() {
                         </li>
                       ))}
                     </ol>
+                    <span className="mt-2 block text-sm text-muted">
+                      {storesVersusLow(ranked.slice(0, 3), suggestion.low, suggestion.when)}
+                      <ChangeMark kind="new" />
+                    </span>
                   </span>
                 </Link>
               </li>
