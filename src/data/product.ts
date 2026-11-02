@@ -180,6 +180,15 @@ export function storesVersusLow(
   });
 }
 
+export function winnerReason(offers: { site: string; shelf: number; total: number }[]) {
+  const [best, next] = offers;
+  if (!next) return null;
+  if (best.shelf > next.shelf) {
+    return `${best.site} lists a higher shelf price than ${next.site}, but the delivered total is ${money(next.total - best.total)} lower.`;
+  }
+  return `${best.site} is ${money(next.total - best.total)} less than ${next.site} after tax and shipping.`;
+}
+
 export type Advice = {
   title: "Buy now" | "Wait" | "No strong signal" | "Insufficient data";
   confidence: "moderate" | "low";

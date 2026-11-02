@@ -22,6 +22,7 @@ import {
   storesVersusLow,
   suggestedAlert,
   versusDecember,
+  winnerReason,
 } from "@/data/product";
 
 function historyLine(values: number[], target: number | null, today: number) {
@@ -393,6 +394,12 @@ function Home() {
                       )}
                       <ChangeMark kind="updated" />
                     </span>
+                    {winnerReason(ranked) ? (
+                      <span className="mt-2 block min-w-0 text-sm text-muted">
+                        {winnerReason(ranked)}
+                        <ChangeMark kind="new" />
+                      </span>
+                    ) : null}
                   </span>
                 </Link>
               </li>

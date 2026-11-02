@@ -17,7 +17,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { advise, alertStorageKey, alertUnderLow, asOf, asOfText, chartDrop, cheaperThanToday, checkAgainLabel, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, sameAsToday, storesVersusLow, suggestedAlert, versusDecember, type Product } from "@/data/product";
+import { advise, alertStorageKey, alertUnderLow, asOf, asOfText, chartDrop, cheaperThanToday, checkAgainLabel, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, sameAsToday, storesVersusLow, suggestedAlert, versusDecember, winnerReason, type Product } from "@/data/product";
 import { ChangeMark, ReviewNote } from "@/components/change-mark";
 import { SiteHeader } from "@/components/site-header";
 
@@ -218,11 +218,9 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
               Lowest of the tracked sites, including estimated sales tax (
               {(location.tax * 100).toFixed(2)}%) and shipping. Estimate only.
             </p>
-            {ranked[1] ? (
+            {winnerReason(ranked) ? (
               <p className="mt-2 text-sm text-fg">
-                {best.shelf > ranked[1].shelf
-                  ? `${best.site} lists a higher shelf price than ${ranked[1].site}, but the delivered total is ${money(ranked[1].total - best.total)} lower.`
-                  : `${best.site} is ${money(ranked[1].total - best.total)} less than ${ranked[1].site} after tax and shipping.`}
+                {winnerReason(ranked)}
                 <ChangeMark kind="new" />
               </p>
             ) : null}
