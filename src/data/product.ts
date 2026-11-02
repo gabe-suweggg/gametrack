@@ -119,7 +119,15 @@ export function sameAsToday(item: Product, total: number, tax: number) {
   return `Seen ${days.length} times, latest ${recent[0]} and ${recent[1]}.`;
 }
 
-export const asOf = "2026-10-29";
+export const asOf = "2026-11-01";
+
+export function asOfText() {
+  return calendarDate(asOf).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
 
 export const nextSale = {
   name: "Black Friday",
@@ -155,6 +163,7 @@ export function advise(item: Product, tax: number): Advice {
   const low = delivered(lowPoint.shelf, 0, tax);
   const lowWhen = shortDate(lowPoint.date);
   const weeks = weeksBetween(asOf, nextSale.date);
+  const daysAway = Math.round(weeks * 7);
   const nearLow = current <= low * 1.03;
   const aboveLow = money(Math.abs(current - low));
 
@@ -172,7 +181,7 @@ export function advise(item: Product, tax: number): Advice {
       title: "Wait",
       confidence: "moderate",
       tone: "wait",
-      reason: `${nextSale.name} is about ${Math.round(weeks)} weeks away. Today's ${money(current)} is ${aboveLow} above the ${lowWhen} low. This can be wrong.`,
+      reason: `${nextSale.name} is ${shortDate(nextSale.date)}, ${daysAway} days away. Today's ${money(current)} is ${aboveLow} above the ${lowWhen} low. This can be wrong.`,
     };
   }
 

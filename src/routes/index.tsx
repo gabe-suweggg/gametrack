@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import {
   advise,
   alertStorageKey,
+  asOfText,
   chartDrop,
   cheaperThanToday,
   delivered,
@@ -66,7 +67,10 @@ function Home() {
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-sm text-muted">Sample catalog · not live prices</p>
+            <p className="text-sm text-muted">
+              Sample catalog · not live prices · as of {asOfText()}
+              <ChangeMark kind="updated" />
+            </p>
             <h1 className="mt-2 text-3xl font-semibold tracking-tight">Tracked hardware</h1>
             <ReviewNote />
             {import.meta.env.DEV ? (

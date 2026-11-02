@@ -17,11 +17,12 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { advise, alertStorageKey, chartDrop, cheaperThanToday, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, sameAsToday, versusDecember, type Product } from "@/data/product";
+import { advise, alertStorageKey, asOf, asOfText, chartDrop, cheaperThanToday, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, sameAsToday, versusDecember, type Product } from "@/data/product";
 import { ChangeMark, ReviewNote } from "@/components/change-mark";
 import { SiteHeader } from "@/components/site-header";
 
-const TODAY = new Date(2026, 9, 29, 12);
+const [asOfYear, asOfMonth, asOfDay] = asOf.split("-").map(Number);
+const TODAY = new Date(asOfYear, asOfMonth - 1, asOfDay, 12);
 
 function chartDate(iso: string) {
   const [year, month, day] = iso.split("-").map(Number);
@@ -172,7 +173,10 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
           <article className="rounded-2xl border border-line bg-surface p-5">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
-                <p className="text-sm text-muted">Estimated total ({location.label})</p>
+                <p className="text-sm text-muted">
+                  Estimated total ({location.label}) · as of {asOfText()}
+                  <ChangeMark kind="updated" />
+                </p>
                 <p className="text-5xl font-semibold tracking-tight">{money(best.total)}</p>
                 <p className="mt-2 text-sm text-muted">
                   {cheaperThanToday(item, best.total, location.tax)}
