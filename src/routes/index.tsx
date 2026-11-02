@@ -9,6 +9,7 @@ import {
   asOfText,
   chartDrop,
   cheaperThanToday,
+  checkAgainLabel,
   delivered,
   locationFromSearch,
   locations,
@@ -150,6 +151,12 @@ function Home() {
                       {advice.reason}
                       <ChangeMark kind="updated" />
                     </span>
+                    {advice.title === "Wait" ? (
+                      <span className="mt-1 block text-sm text-muted">
+                        {checkAgainLabel()}
+                        <ChangeMark kind="new" />
+                      </span>
+                    ) : null}
                     {drop ? (
                       <span className="mt-1 block text-sm text-muted">
                         Last December the shelf price went from {money(drop.from.shelf)} to{" "}

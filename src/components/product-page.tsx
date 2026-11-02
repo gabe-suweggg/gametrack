@@ -17,7 +17,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { advise, alertStorageKey, asOf, asOfText, chartDrop, cheaperThanToday, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, sameAsToday, versusDecember, type Product } from "@/data/product";
+import { advise, alertStorageKey, asOf, asOfText, chartDrop, cheaperThanToday, checkAgainLabel, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, sameAsToday, versusDecember, type Product } from "@/data/product";
 import { ChangeMark, ReviewNote } from "@/components/change-mark";
 import { SiteHeader } from "@/components/site-header";
 
@@ -434,6 +434,12 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
               {advice.reason}
               <ChangeMark kind="updated" />
             </p>
+            {advice.title === "Wait" ? (
+              <p className="mt-2 text-sm leading-relaxed text-fg">
+                {checkAgainLabel()}
+                <ChangeMark kind="new" />
+              </p>
+            ) : null}
           </article>
         </section>
 

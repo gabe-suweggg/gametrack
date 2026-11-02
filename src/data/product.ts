@@ -134,6 +134,14 @@ export const nextSale = {
   date: "2026-11-27",
 };
 
+export function checkAgainLabel() {
+  const sale = calendarDate(nextSale.date);
+  const monday = new Date(sale);
+  monday.setDate(sale.getDate() - ((sale.getDay() + 6) % 7));
+  const when = monday.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  return `Check again the week of ${when}. The price may not drop.`;
+}
+
 export type Advice = {
   title: "Buy now" | "Wait" | "No strong signal" | "Insufficient data";
   confidence: "moderate" | "low";
