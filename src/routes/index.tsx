@@ -384,7 +384,15 @@ function Home() {
                               ship
                             </span>
                           </span>
-                          <span className="font-medium">{money(offer.total)}</span>
+                          <span className="text-right font-medium">
+                            {money(offer.total)}
+                            {index > 0 ? (
+                              <span className="mt-1 block text-sm font-normal text-muted">
+                                {money(offer.total - best.total)} more than {best.site}
+                                <ChangeMark kind="new" />
+                              </span>
+                            ) : null}
+                          </span>
                         </li>
                       ))}
                     </ol>

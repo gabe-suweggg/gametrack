@@ -268,7 +268,15 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
                       ship
                     </p>
                   </div>
-                  <p className="text-lg font-semibold">{money(offer.total)}</p>
+                  <div className="text-right">
+                    <p className="text-lg font-semibold">{money(offer.total)}</p>
+                    {index > 0 ? (
+                      <p className="text-sm font-normal text-muted">
+                        {money(offer.total - best.total)} more than {best.site}
+                        <ChangeMark kind="new" />
+                      </p>
+                    ) : null}
+                  </div>
                 </li>
               ))}
             </ol>
