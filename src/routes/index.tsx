@@ -22,6 +22,7 @@ import {
   storesVersusLow,
   suggestedAlert,
   versusDecember,
+  winnerAcrossLocations,
   winnerReason,
   shippingBeatsShelf,
   shippingShortfall,
@@ -411,6 +412,12 @@ function Home() {
                     {shippingShortfall(ranked) ? (
                       <span className="mt-1 block min-w-0 text-sm text-muted">
                         {shippingShortfall(ranked)}
+                        <ChangeMark kind="new" />
+                      </span>
+                    ) : null}
+                    {winnerAcrossLocations(item.offers, locations) ? (
+                      <span className="mt-1 block min-w-0 text-sm text-muted">
+                        {winnerAcrossLocations(item.offers, locations)}
                         <ChangeMark kind="new" />
                       </span>
                     ) : null}

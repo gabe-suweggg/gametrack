@@ -217,6 +217,27 @@ export function shippingShortfall(
   return `Those savings add up to ${money(saved)}. That is ${money(short)} short of the ${money(shipGap)} shipping.`;
 }
 
+export function winnerAcrossLocations(offers: Offer[], places: Location[]) {
+  if (places.length < 2) return null;
+  const rows = places.map((place) => {
+    const ranked = rankOffers(offers, place.tax);
+    const best = ranked[0];
+    const next = ranked[1];
+    return { place, best, lead: next ? next.total - best.total : 0 };
+  });
+  const site = rows[0].best.site;
+  const other = rows.find((row) => row.best.site !== site);
+  if (other) {
+    return `${other.best.site} is cheapest in ${other.place.label}. ${site} is cheapest in the rest.`;
+  }
+  const narrow = rows.reduce((left, right) => (left.lead < right.lead ? left : right));
+  const wide = rows.reduce((left, right) => (left.lead > right.lead ? left : right));
+  if (narrow.place.id === wide.place.id) {
+    return `${site} is cheapest in all ${places.length} locations.`;
+  }
+  return `${site} is cheapest in all ${places.length} locations. The lead is smallest in ${narrow.place.label}, ${money(narrow.lead)}, and largest in ${wide.place.label}, ${money(wide.lead)}.`;
+}
+
 export type Advice = {
   title: "Buy now" | "Wait" | "No strong signal" | "Insufficient data";
   confidence: "moderate" | "low";

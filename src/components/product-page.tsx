@@ -17,7 +17,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { advise, alertStorageKey, alertUnderLow, asOf, asOfText, chartDrop, cheaperThanToday, checkAgainLabel, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, sameAsToday, storesVersusLow, suggestedAlert, versusDecember, winnerReason, shippingBeatsShelf, shippingShortfall, type Product } from "@/data/product";
+import { advise, alertStorageKey, alertUnderLow, asOf, asOfText, chartDrop, cheaperThanToday, checkAgainLabel, delivered, locations, money, nextSale, parseAlert, ranges, rankOffers, sameAsToday, storesVersusLow, suggestedAlert, versusDecember, winnerReason, shippingBeatsShelf, shippingShortfall, winnerAcrossLocations, type Product } from "@/data/product";
 import { ChangeMark, ReviewNote } from "@/components/change-mark";
 import { SiteHeader } from "@/components/site-header";
 
@@ -233,6 +233,12 @@ export function ProductPage({ item, locationId }: { item: Product; locationId: s
             {shippingShortfall(ranked) ? (
               <p className="mt-2 text-sm text-muted">
                 {shippingShortfall(ranked)}
+                <ChangeMark kind="new" />
+              </p>
+            ) : null}
+            {winnerAcrossLocations(item.offers, locations) ? (
+              <p className="mt-2 text-sm text-muted">
+                {winnerAcrossLocations(item.offers, locations)}
                 <ChangeMark kind="new" />
               </p>
             ) : null}
