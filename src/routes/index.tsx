@@ -21,6 +21,7 @@ import {
   sameAsToday,
   storesVersusLow,
   suggestedAlert,
+  taxFlipLine,
   versusDecember,
   winnerAcrossLocations,
   winnerReason,
@@ -418,6 +419,12 @@ function Home() {
                     {winnerAcrossLocations(item.offers, locations) ? (
                       <span className="mt-1 block min-w-0 text-sm text-muted">
                         {winnerAcrossLocations(item.offers, locations)}
+                        <ChangeMark kind="new" />
+                      </span>
+                    ) : null}
+                    {taxFlipLine(item.offers, locations) ? (
+                      <span className="mt-1 block min-w-0 text-sm text-muted">
+                        {taxFlipLine(item.offers, locations)}
                         <ChangeMark kind="new" />
                       </span>
                     ) : null}

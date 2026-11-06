@@ -238,6 +238,27 @@ export function winnerAcrossLocations(offers: Offer[], places: Location[]) {
   return `${site} is cheapest in all ${places.length} locations. The lead is smallest in ${narrow.place.label}, ${money(narrow.lead)}, and largest in ${wide.place.label}, ${money(wide.lead)}.`;
 }
 
+export function taxFlipLine(offers: Offer[], places: Location[]) {
+  const base = rankOffers(offers, 0)[0];
+  if (!base || places.length === 0) return null;
+  let threat: { site: string; tax: number } | null = null;
+  for (const rival of offers) {
+    if (rival.site === base.site) continue;
+    const shelfGap = base.shelf - rival.shelf;
+    if (shelfGap <= 0.5) continue;
+    const tax = (-shelfGap + (rival.shipping - base.shipping)) / shelfGap;
+    if (tax <= 0) continue;
+    if (!threat || tax < threat.tax) threat = { site: rival.site, tax };
+  }
+  if (!threat) return null;
+  const highest = places.reduce((left, right) => (left.tax > right.tax ? left : right));
+  const pct = (rate: number) => `${(rate * 100).toFixed(2)}%`;
+  if (highest.tax + 0.0001 >= threat.tax) {
+    return `${threat.site} beats ${base.site} where sales tax is above ${pct(threat.tax)}. ${highest.label} is already there, at ${pct(highest.tax)}.`;
+  }
+  return `${threat.site} only beats ${base.site} if sales tax is above ${pct(threat.tax)}. The highest tax here is ${highest.label} at ${pct(highest.tax)}.`;
+}
+
 export type Advice = {
   title: "Buy now" | "Wait" | "No strong signal" | "Insufficient data";
   confidence: "moderate" | "low";
