@@ -24,6 +24,7 @@ import {
   versusDecember,
   winnerReason,
   shippingBeatsShelf,
+  shippingShortfall,
 } from "@/data/product";
 
 function historyLine(values: number[], target: number | null, today: number) {
@@ -404,6 +405,12 @@ function Home() {
                     {shippingBeatsShelf(ranked) ? (
                       <span className="mt-1 block min-w-0 text-sm text-muted">
                         {shippingBeatsShelf(ranked)}
+                        <ChangeMark kind="new" />
+                      </span>
+                    ) : null}
+                    {shippingShortfall(ranked) ? (
+                      <span className="mt-1 block min-w-0 text-sm text-muted">
+                        {shippingShortfall(ranked)}
                         <ChangeMark kind="new" />
                       </span>
                     ) : null}

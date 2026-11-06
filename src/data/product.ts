@@ -204,6 +204,19 @@ export function shippingBeatsShelf(
   return `${next.site} saves ${money(shelfSave)} on the shelf, then pays ${money(shipGap)} to ship.`;
 }
 
+export function shippingShortfall(
+  offers: { shelf: number; shipping: number; taxAmount: number }[],
+) {
+  const [best, next] = offers;
+  if (!next || best.shelf <= next.shelf) return null;
+  const shipGap = next.shipping - best.shipping;
+  if (shipGap < 0.5) return null;
+  const saved = best.shelf - next.shelf + Math.max(0, best.taxAmount - next.taxAmount);
+  const short = shipGap - saved;
+  if (short < 0.5) return null;
+  return `Those savings add up to ${money(saved)}. That is ${money(short)} short of the ${money(shipGap)} shipping.`;
+}
+
 export type Advice = {
   title: "Buy now" | "Wait" | "No strong signal" | "Insufficient data";
   confidence: "moderate" | "low";
